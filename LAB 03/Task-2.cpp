@@ -255,7 +255,7 @@ public:
             cout << temp->data << " -> ";
             temp = temp->next;
         }
-        cout << "NULL! " << endl;
+        cout << "NULL " << endl;
     }
 
     void traverseReverse() {
@@ -276,41 +276,84 @@ public:
         }
         tail = nullptr;
     }
+    
+    node<T>* getHead() {
+        return head;
+    }
+
+    node<T>* getTail() {
+        return tail;
+    }
+};
+
+class webBrower {
+private:
+    DoublyLinkedList<string> historyDLL;
+    node<string>* currentPgPtr;
+
+public:
+    webBrower() {
+        currentPgPtr = nullptr;
+    }
+
+    webBrower(string url) {
+        historyDLL.insertAtEnd(url);
+        currentPgPtr = historyDLL.getHead();
+    }
+
+    webBrower(const webBrower& other) {
+        historyDLL = other.historyDLL;
+        currentPgPtr = historyDLL.getHead();
+    }
+
+    ~webBrower() {
+        historyDLL.freeMemory();
+    }
+
+    //----------------------------------------------
+
+    void visitPage(string url) {
+    historyDLL.insertAtEnd(url);
+    currentPgPtr = historyDLL.getTail();   // this will get the tail
+    cout << "Visited: " << url << endl;
+    }
+
+    string back() {
+        if(currentPgPtr == nullptr || currentPgPtr->prev == nullptr) {      // to check if current webpage node is null or first node.
+            string temp = "Can't go back -  at the beginning of history of webswer.";
+            return temp;
+        }
+        currentPgPtr = currentPgPtr->prev;  // copy previous webpage into current page
+        cout << "Back to: " << currentPgPtr->data << endl;
+        return currentPgPtr->data;
+    }
+
+    string forward() {
+        if(currentPgPtr == nullptr || currentPgPtr->next == nullptr) {  // to check if current webpage pointer is null or last node.
+            string temp = "Can't go forward - at the end of webrowser history.";
+            return temp;
+        }
+        currentPgPtr = currentPgPtr->next;  // copy next webpage into current page
+        cout << "Forward to: " << currentPgPtr->data << endl;
+        return currentPgPtr->data;
+    }
+
+    void displayHistory() {
+        cout << "~~~~webBrower history~~~~: ";
+        historyDLL.traverseForward();
+        }
 };
 
 int main() {
-    DoublyLinkedList<int> list;
-
-    DoublyLinkedList<int> list2 = list;
-    cout << (list.isEmpty() ? "Yes" : "No") << endl;
-    list.insertAtEnd(1);
-    list.insertAtEnd(2);
-    list.insertAtEnd(3);
-    list.insertAtEnd(4);
-    list.insertAtEnd(5);
-    cout << (list.isEmpty() ? "Yes" : "No") << endl;
-    list.traverseForward();
-    list.deleteFromStart();
-    list.traverseForward();
-    list.insertAtBeginning(6);
-    list.traverseForward();
-    list.insertAtEnd(9);
-    list.traverseForward();
-    list.deleteFromEnd();
-    list.traverseForward();
-    list.deleteAtAnyPos(3);
-    list.traverseForward();
-    list.insertAtAnyPos(4, 7);
-    list.traverseForward();
-    list.deleteFromStart();
-    list.traverseForward();
-    list.deleteAtAnyPos(2);
-    list.traverseForward();
-    list.deleteFromStart();
-    list.deleteFromStart();
-    list.deleteFromStart();
-    list.traverseForward();
-
+    webBrower browser("stack.com");
+    browser.displayHistory();
+    browser.visitPage("google.com");
+    browser.visitPage("facebook.com");
+    browser.back();
+    browser.displayHistory();
+    browser.forward();
+    browser.visitPage("youtube.com");
+    browser.displayHistory();
 
     return 0;
 }
