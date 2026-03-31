@@ -1,0 +1,42 @@
+A government dep intends to digitize its internal doc workflow system. In this system off doc submitted by employees must pass thorough structures review stages before final approval or rejections
+Each doc undergo multiple revisions during review process. Dep requires ability to track doc history, efficiently search archived docs, reverse recent administrative actions
+Desgign and implement a simplified prototype of this workflow management system.
+SYSTEM DESCRIPTION:
+-> each doc contails
+i. ID, title, author, currentstatus(pending, approved, inreview, rejected)
+ii. each doc ma contain multiple revisions
+- revNumber(int) , ModifiedContent(string)
+- Revisions represent chronological
+FUNCTIONAL REQUIREMENTS:
+i. Submission of new document
+- Timecomplexity for both searching a doc and inserting new doc must be O(logn)
+ii. Placement of review workflow 
+- upon sub doc gets into review workflow and is marked as pending
+- Follow FIFO for reviewal of docs
+- when reviewd status to inreview 
+- insertion and removal costs O(1)
+
+iii. Adding a revision
+- during review stage, a rev may req modification
+- each mod creates a new rev record
+- O(1
+
+iv. Undoing the most recent rev)
+- on incorrect tev recorded, system remove most recent one
+O(1)
+
+v. Final approval or rejection
+- after reviewval doc be marked as Approved or Rejected
+
+vi. Display or archived docs
+- in ascending order of ID
+- O(n)
+
+vii.System wide administrative undo
+    Undo these 
+        -. Submission of doc
+        - add of revision
+        - final approval or rejectioin of doc
+
+-> STL constrainers are prohibited
+-> arrays not used for dynamic growing collectrion
