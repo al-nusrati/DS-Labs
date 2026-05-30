@@ -6,15 +6,19 @@ using namespace std;
 class HashMap {
 private:
     static const int hashIndexes = 10;
-    list<pair<int, string>> ArrLinkedList[hashIndexes];  //array of linked lists 
+    list<pair<string, string>> ArrLinkedList[hashIndexes];  //array of linked lists
 
-    int hashFunction(int key) {
-        return key % hashIndexes;
+    int hashFunction(string key) {
+        int sum = 0;
+        for (int i = 0; i < key.length(); i++) {  //sum of ASCII values of each char
+            sum += key[i];
+        }
+        return sum % hashIndexes;
     }
 
 public:
 
-    void insert(int key, string value) {
+    void insert(string key, string value) {
         int index = hashFunction(key);
         for (auto it = ArrLinkedList[index].begin(); it != ArrLinkedList[index].end(); it++) {
             if (it->first == key) {    //this checks if key already exists or not. if it does then it updates 'value' of that 'key'.
@@ -27,7 +31,7 @@ public:
         cout << "Inserted (" << key << ", " << value << ") at index " << index << "\n";
     }
 
-    void deleteItem(int key) {
+    void deleteItem(string key) {
         int index = hashFunction(key);
         for (auto it = ArrLinkedList[index].begin(); it != ArrLinkedList[index].end(); it++) {      //no array , used iterator to traverse the linked list at that index as memory is scattered
             if (it->first == key) {
@@ -39,15 +43,15 @@ public:
         cout << "Key " << key << " not found. Nothing deleted.\n";
     }
 
-    void search(int key) {
+    bool search(string key, string& retrievedValue) {  // returns true/false, fills retrievedValue for login comparison
         int index = hashFunction(key);
         for (auto it = ArrLinkedList[index].begin(); it != ArrLinkedList[index].end(); it++) {
             if (it->first == key) {
-                cout << "Found: Key " << key << " " << it->second << " at index " << index << "\n";
-                return;
+                retrievedValue = it->second;
+                return true;
             }
         }
-        cout << "Key " << key << " not found.\n";
+        return false;
     }
 
     void display() {
@@ -66,36 +70,14 @@ public:
         }
     }
 
-        bool isEmpty() {
+    bool isEmpty() {
         for (int i = 0; i < hashIndexes; i++) { //iterating through all indexes of the hash array
             if (!ArrLinkedList[i].empty()) {
                 return false;
             }
         }
         return true;
-    }   
+    }
 
 };
 
-int main() {
-    HashMap hm;
-
-    hm.insert(105, "Jawad");
-    hm.insert(205, "Rujman");   // collision
-    hm.insert(305, "Raiyan");   
-    hm.insert(42,  "Musab");
-    hm.insert(73,  "Ahmed");
-
-    hm.display();
-
-    hm.search(205);
-    hm.search(99);   
-
-    hm.deleteItem(205);
-    hm.search(205);  
-
-    hm.display();
-
-    system("pause>0");
-    return 0;
-}

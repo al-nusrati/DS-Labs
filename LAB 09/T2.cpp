@@ -1,46 +1,64 @@
 #include<iostream>
-#include<stack>
 #include<string>
+#include<stack>
+
 using namespace std;
 
-class ValidatorSetup{
-public:
+void validation(string& text){
 
-    void validate(string expr){
-        stack<int> s; 
-        int validPairs = 0;
+    int index = 0;
+    int valid = 0;
+    stack<char> st;
 
-        for (int i = 0; i < expr.length(); i++){
-            char ch = expr[i];
-            if(ch == '(' || ch == '{' || ch == '[')    s.push(i);
-            else if(ch == ')' || ch == '}' || ch == ']'){
-                if(s.empty())    {cout << "Unbalanced-> First mismatch at position: " << i << "\nValid pairs: " << validPairs << endl;   return;}
-                char topChar = expr[s.top()];
-                if((ch == ')' && topChar == '(') || (ch == '}' && topChar == '{') || (ch == ']' && topChar == '[')){    s.pop();    validPairs++;}
-                else    {cout << "Unbalanced-> First mismatch at position: " << i << "\nValid pairs: " << validPairs << endl;   return;}
-            }
+    for(char ch: text){
+        if(ch=='(' || ch=='[' || ch=='{'){
+            st.push(ch);
         }
-        if(!s.empty())    {cout << "Unbalanced! First mismatch at position: " << s.top() << " (Unclosed bracket)\nValid pairs: " << validPairs << endl;   return;}
-        cout << "Expression is Balanced." << endl;
-        cout << "Total valid pairs: " << validPairs << endl;
+        else if(ch == ')'){
+            if (st.empty() || st.top() != '('){
+                cout << "Error @ index " << index << endl;
+                return;
+            }
+            st.pop();
+            valid++;
+        }
+        else if(ch == '}'){
+            if (st.empty() || st.top() != '{'){
+                cout << "Error @ index " << index << endl;
+                return;
+            }
+            st.pop();
+            valid++;
+        }
+        else if(ch == ']'){
+            if (st.empty() || st.top() != '['){
+                cout << "Error @ index " << index << endl;
+                return;
+            }
+            st.pop();
+            valid++;
+        }
+        index++;
     }
 
-};
+    if(st.empty()){
+        cout << "Balanced valid pairs: " << valid << endl;
+    }
+    else {
+        cout << "Unbalanced " << endl;
+    }
+}
 
 int main(){
-    ValidatorSetup val;
+    string text;
+    cout << "Enter expression: ";
     
-    string expr1 = "{[()]}";
-    cout << "Testing: " << expr1 << endl;
-    val.validate(expr1);
+    getline(cin, text); 
+    
+    validation(text);
+    
+    cout << "Input processed: " << text << endl;
 
-    cout << "\nTesting: {[(])}" << endl;
-    val.validate("{[(])}");
-
-    cout << "\nTesting: ((()" << endl;
-    val.validate("((()");
-
-    cin.ignore();
-    cin.get();    
+    system("pause>0");
     return 0;
 }

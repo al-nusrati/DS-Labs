@@ -1,52 +1,49 @@
-#define TASK6_INCLUDE   // Prevents Task 5 main() from compiling
-#include <iostream>
-#include <string>
-#include "T5.cpp"
-using namespace std;
+#include "Hash.cpp"
+
+void regUser(HashMap& hm) {
+    string username, password;
+    cout << "Enter username: ";
+    cin >> username;
+    cout << "Enter password: ";
+    cin >> password;
+    hm.insert(username, password);
+}
+
+void loginUser(HashMap& hm) {
+    string username, password, retrievedPassword;
+    cout << "Enter username: ";
+    cin >> username;
+    cout << "Enter password: ";
+    cin >> password;
+
+    hm.search(username, retrievedPassword);  // search returns true/false, fills retrievedPassword
+    if (retrievedPassword == password)   cout << "Authentication successful: " << username << "!\n";
+    else                                 cout << "Authentication failure: Wrong password.\n";
+    
+}
 
 int main() {
-    HashTable ht;
+    HashMap hm;
+    int choice;
 
-    ht.insert("al_nusrati", "Pass@1234");
-    ht.insert("admin",       "admin123");
-    ht.insert("destrox",    "Secure!99");
-    ht.insert("al_nusrati", "duplicate");  
+    do {
+        cout << "\n--- Login System ---\n";
+        cout << "1. Register\n";
+        cout << "2. Login\n";
+        cout << "3. Display Table\n";
+        cout << "4. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
 
-    ht.display();
+        switch (choice) {
+        case 1: regUser(hm);            break;
+        case 2: loginUser(hm);          break;
+        case 3: hm.display();           break;
+        case 4: cout << "Exiting.\n";   break;
+        default: cout << "Invalid choice.\n";
+        }
+    } while (choice != 4);
 
-    string users[]  = {"al_nusrati", "admin",     "ghost_user"};
-    string inputs[] = {"Pass@1234",   "wrongpass", "Pass@1234" };
-
-    for (int i = 0; i < 3; i++) {
-        string stored = ht.search(users[i]);
-        cout << "\nLogin attempt [" << users[i] << "]: ";
-        if (stored.empty())
-            cout << "Authentication failure - user not found.\n";
-        else if (stored == inputs[i])
-            cout << "Authentication successful. Welcome, " << users[i] << "!\n";
-        else
-            cout << "Authentication failure - incorrect password.\n";
-    }
-
-    cout << endl;
-    ht.remove("destrox");
-    ht.remove("nobody");
-
-    ht.display();
-
-    string uname, pass;
-    cout << "\nEnter username: "; cin >> uname;
-    cout << "Enter password: "; cin >> pass;
-
-    string stored = ht.search(uname);
-    if (stored.empty())
-        cout << "Authentication failure - user not found.\n";
-    else if (stored == pass)
-        cout << "Authentication successful. Welcome, " << uname << "!\n";
-    else
-        cout << "Authentication failure - incorrect password.\n";
-
-    cin.ignore();
-    cin.get();
+    system("pause>0");
     return 0;
 }
